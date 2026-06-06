@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhàu Ngâm Đường - D.T.Chánh</title>
+
+    <style>
+        :root {
+            /* Theme 1: Nhàu Ngâm Đường (Default) */
+            --primary: #8b4513;
+            --primary-hover: #a0522d;
+            --primary-light: #f5deb3;
+            --bg-start: #f5f5dc;
+            --card-border: #d2b48c;
+            --text-main: #5c4033;
+            --input-bg: #fdf5e6;
+            --transition-speed: 0.3s;
+        }
+
+        /* Theme 2: Rượu Ớt */
+        body.theme-chili {
+            --primary: #900C3F;
+            --primary-hover: #C70039;
+            --primary-light: #f9f9f9;
+            --bg-start: #f0f4f8;
+            --card-border: #900C3F;
+            --text-main: #000000;
+            --input-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-start);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: block;
+            padding: 1.5rem 1rem 5rem 1rem;
+            max-width: 40rem;
+            margin: 0 auto;
+            width: 100%;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+            font-weight: normal;
+            font-size: 1.1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .author-tag {
+            font-style: normal;
+            font-size: 1.2rem;
+            text-align: right;
+            color: #000000;
+            margin-bottom: 1.5rem;
+            font-weight: normal;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            transition: color var(--transition-speed) ease;
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mode-buttons button {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid var(--primary);
+            border-radius: 0.5rem;
+            background-color: var(--input-bg);
+            color: var(--primary);
+            cursor: pointer;
+            outline: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .mode-buttons button.active {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid var(--card-border);
+            border-radius: 0.5rem;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+
+        .result-box {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--card-border);
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            transition: all var(--transition-speed) ease;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .instructions-box {
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--card-border);
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .instructions-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions-box p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="app-title">Nhàu Ngâm Đường</h1>
+    <div class="author-tag">D.T.Chánh</div>
+
+    <!-- 2 nút chọn công thức bên trên theo yêu cầu -->
+    <div class="mode-buttons">
+        <button type="button" id="btn-nhau" class="active" onclick="switchMode('nhau')">Nhàu Ngâm Đường</button>
+        <button type="button" id="btn-ruouOt" onclick="switchMode('ruouOt')">Rượu Ớt</button>
+    </div>
+
+    <!-- Form dùng chung phục vụ cả hai chức năng -->
+    <div class="form-group">
+        <h3 id="input-label">Lượng Nhàu (gam)</h3>
+        <input type="number" id="quantity-input" placeholder="Nhập lượng nhàu" oninput="tinhToan()" value="1000">
+    </div>
+
+    <div class="form-group">
+        <h3 id="output-label">Lượng Đường (gam)</h3>
+        <div id="result-display" class="result-box">160 => 200</div>
+    </div>
+
+    <div class="form-group">
+        <h3>Hướng Dẫn Ngâm:</h3>
+        <div id="instructions-box" class="instructions-box">
+            <!-- Sẽ được thêm bằng JS từ nội dung file mẫu gốc -->
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu và nhãn chính xác từ các file gốc
+        const CONFIG = {
+            nhau: {
+                pageTitle: "Nhàu Ngâm Đường - D.T.Chánh",
+                title: "Nhàu Ngâm Đường",
+                inputLabel: "Lượng Nhàu (gam)",
+                inputPlaceholder: "Nhập lượng nhàu",
+                outputLabel: "Lượng Đường (gam)",
+                defaultValue: 1000,
+                calculate: (val) => {
+                    if (isNaN(val) || val < 0) return "Vui lòng nhập một số dương.";
+                    const min = Math.round(val * 0.18);
+                    const max = Math.round(val * 0.20);
+                    return `${min} => ${max}`;
+                },
+                guidelines: [
+                    "- Làm nát trái nhàu chín (mềm) xen kẽ từng lớp với đường, lấp đầy đường ở lớp trên cùng.",
+                    "- Để nơi mát, hơn 1 tuần có thể dùng được.",
+                    "- Mỗi lần dùng 1 muỗng canh, 2 lần/ngày sau bữa ăn."
+                ],
+                themeClass: ""
+            },
+            ruouOt: {
+                pageTitle: "Rượu Ớt - D.T.Chánh",
+                title: "Rượu Ớt",
+                inputLabel: "Lượng Rượu (ml)",
+                inputPlaceholder: "Nhập số ml rượu",
+                outputLabel: "Lượng Ớt (gam)",
+                defaultValue: 1000,
+                calculate: (val) => {
+                    if (isNaN(val) || val < 0) return "Vui lòng nhập một số dương.";
+                    return Math.round(val / 5);
+                },
+                guidelines: [
+                    "- Xay 200 gam ớt chỉ thiên, ngâm với 1 lít rượu 40 độ, tránh ánh sáng, lắc đều mỗi ngày, bảo quản nhiệt độ phòng, ngâm 3 tuần, bỏ xác ớt.",
+                    "- Mỗi lần dùng 1 - 2 muỗng cà phê, 2 lần/ngày. Mới dùng nên thử trước 1/2 muỗng.",
+                    "- Có thể pha loãng rượu ớt với nước để uống hoặc chan vào cơm để giảm cay."
+                ],
+                themeClass: "theme-chili"
+            }
+        };
+
+        let currentMode = 'nhau';
+        const body = document.body;
+        const appTitle = document.getElementById('app-title');
+        const inputLabel = document.getElementById('input-label');
+        const quantityInput = document.getElementById('quantity-input');
+        const outputLabel = document.getElementById('output-label');
+        const resultDisplay = document.getElementById('result-display');
+        const instructionsBox = document.getElementById('instructions-box');
+
+        const btnNhau = document.getElementById('btn-nhau');
+        const btnRuouOt = document.getElementById('btn-ruouOt');
+
+        // Hàm chuyển đổi chế độ ngâm
+        function switchMode(mode) {
+            if (currentMode === mode) return;
+            currentMode = mode;
+
+            // Đổi trạng thái active của nút bấm
+            if (mode === 'nhau') {
+                btnNhau.classList.add('active');
+                btnRuouOt.classList.remove('active');
+                body.className = '';
+            } else {
+                btnRuouOt.classList.add('active');
+                btnNhau.classList.remove('active');
+                body.className = CONFIG.ruouOt.themeClass;
+            }
+
+            const cfg = CONFIG[mode];
+
+            // Cập nhật tiêu đề trang (title) và h1 chuẩn theo file mẫu
+            document.title = cfg.pageTitle;
+            appTitle.textContent = cfg.title;
+
+            // Cập nhật nhãn và placeholder
+            inputLabel.textContent = cfg.inputLabel;
+            quantityInput.setAttribute('placeholder', cfg.inputPlaceholder);
+            outputLabel.textContent = cfg.outputLabel;
+
+            // Cập nhật giá trị mặc định của chế độ đó
+            quantityInput.value = cfg.defaultValue;
+
+            // Cập nhật tính toán và hướng dẫn
+            tinhToan();
+            renderGuidelines(cfg.guidelines);
+        }
+
+        // Tính toán khối lượng đầu ra dựa vào công thức gốc
+        function tinhToan() {
+            const val = parseFloat(quantityInput.value);
+            resultDisplay.textContent = CONFIG[currentMode].calculate(val);
+        }
+
+        // Hiển thị danh sách hướng dẫn ngâm gốc
+        function renderGuidelines(items) {
+            instructionsBox.innerHTML = '';
+            items.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = item;
+                instructionsBox.appendChild(p);
+            });
+        }
+
+        // Khởi tạo trang ban đầu
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGuidelines(CONFIG.nhau.guidelines);
+            tinhToan();
+        });
+    </script>
+</body>
+
+</html>
